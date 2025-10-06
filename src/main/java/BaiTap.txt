@@ -1,0 +1,79 @@
+
+Bài 1: full name:
+1).Viết 4 cách khác nhau locate ô **Full Name**.
+- id : #username or ID: //*[@id='username']
+-autocomplete(//input[@autocomplete="off"])[1]
+- xpath: //*[@id="userName"]
+- css selector:input#userName
+
+
+2).Locate **Email** bằng **CSS theo thuộc tính**: input#userEmail
+
+3).Locate **Submit** bằng **CSS theo ID** và bằng **XPath dựa theo anh em cùng cấp** của `#currentAddress`.
+- css theo id: button#submit
+- bằng **XPath dựa theo anh em cùng cấp** của `#currentAddress`:
+ //div[@id='currentAddress-wrapper']/following::div/button[@id='submit']
+
+
+Bài 2: Buttons
+1).Tìm nút **Double Click Me** bằng: **ID**, **CSS**, **XPath theo text**.
+- ID : #doubleClickBtn or ID: //*[@id='doubleClickBtn']
+- CSS : button#doubleClickBtn
+- Xpath theo text : //button[text()='Double Click Me'] or //button[normalize-space()='Double Click Me']
+
+2).**Từ** nút **Right Click Me**, dùng **following-sibling::** để tới nút **Click Me**.
+- //div[button[@id='rightClickBtn']]/following-sibling::div//button[@id='rjYTf']
+- //div[button[normalize-space()='Right Click Me']]/following-sibling::div[button[normalize-space()='Click Me']]
+
+3).(Bonus) Viết XPath chứa **một phần text * (partial) để trỏ tới nút Double Click.
+- //button[contains(text(),'Click')]
+- //button[contains(text(),'Double')]
+- //button[starts-with(text(),'Double')]
+
+Bài 3: Links
+1).Locate link **Home** bằng **LinkText** và **PartialLinkText**.
+- Link text://a[normalize-space()='Home'] and //a[@id='simpleLink']
+- Partial text :(//a[contains(text(),'Home')])[1]
+
+2).Dùng **XPath** tìm link **Moved** theo **text**.
+- //a[normalize-space()='Moved']
+
+3).**Từ** link **Home** đầu tiên, chọn **link kế tiếp** (sibling) bằng **following-sibling::**.
+- (//a[normalize-space()='Home'])[1]/parent::p/following-sibling::p[1]
+
+Bài 4: Check Box
+1). Từ nhãn **“Home”**, dùng **ancestor::** để về container node rồi locate **biểu tượng checkbox** bên trái (phần có thể click).
+- (//span[normalize-space()='Home'])[2]/ancestor::label/span[@class='rct-checkbox']
+
+2).Từ node **“Documents”**, dùng **following-sibling::** (hoặc **preceding-sibling::** tùy DOM) để tìm **biểu tượng toggle** (mũi tên) của cùng cấp.
+- //span[@class='rct-title' and text()='Documents']/ancestor::span[@class='rct-text']/button
+- //span[@class='rct-title' and text()='Documents']/parent::label/preceding-sibling::button
+
+3).Chọn checkbox **“Downloads”** bằng XPath theo **text** rồi đi **ngược lên (parent/ancestor)** đến phần tử **click được**.
+- (//span[@class= 'rct-title'])[4]/parent::label/span[@class='rct-checkbox']
+- //span[@class= 'rct-title' and text()='Downloads']/parent::label/span[@class='rct-checkbox']
+
+
+Bài 5: Radio Button
+1) Locate radio **“Yes”** bằng **ID** và **CSS attribute**.
+- ID: //*[@id='yesRadio'] or #yesRadio
+- CSS: input#yesRadio
+
+2) **Từ** text label **“Impressive”**, dùng **ancestor::** đi lên **khối chứa input thật** để locate input.
+- //label[normalize-space()='Impressive']/ancestor::div[1]/input
+
+3) Dùng **following-sibling::** để **từ input “Yes”** tìm **label** tương ứng (cùng cấp).
+//input[@id='yesRadio']/following-sibling::label
+
+Bài 6 — Web Tables
+1) Tìm **hàng** có **First Name = "Cierra"** rồi lấy **Email** của hàng đó (dùng **following-sibling::** để di chuyển theo cột).
+- (//div[@role="gridcell"])[1]/following-sibling::div[3]
+
+2) **Từ ô Last Name của “Alden”**, dùng **ancestor::** lên **hàng** chứa ô đó, rồi locate **nút Edit** trong cùng hàng.
+- (//div[@class='rt-td'])[9]//ancestor::div[1]//span[1]
+ //div[@class='rt-td' and text()='Alden']/ancestor::div[@role='row']//span[@title='Edit']
+
+3) Tìm **tất cả các hàng sau** (following) **hàng có Age = 39** (gợi ý: xác định ô `Age=39` → lên hàng → chọn các hàng `following`).
+- (//div[@class='rt-td'])[3]/ancestor::div[1]
+- //div[@class='rt-td' and text()='39']/ancestor::div[1]
+- //div[@class='rt-td' and text()='39']/ancestor::div[@role='row']/following::div[@role='row']
